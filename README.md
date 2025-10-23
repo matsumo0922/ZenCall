@@ -39,7 +39,7 @@ This document is a checklist for rebuilding a new project from an `InitialProjec
 
 2. **Rename packages and identifiers**
    - Replace the original package prefix in directory names (`me/matsumo/grabee`) with the new prefix (`me/matsumo/koto`). A quick Python pass can rename directories recursively.
-   - Perform a text search/replace for `me.matsumo.grabee` → `me.matsumo.koto` across Kotlin, Gradle, and resource files.
+   - Perform a text search/replace for `me.matsumo.zencall` → `me.matsumo.zencall` across Kotlin, Gradle, and resource files.
    - Update the application entry points:
      - Rename `GrabeeApplication` → `KotoApplication` and fix references (manifest `android:name`, Koin wiring).
      - Rename the root composable `GrabeeApp` → `KotoApp` and adjust call sites (MainActivity, iOS entry point, etc.).
@@ -49,7 +49,7 @@ This document is a checklist for rebuilding a new project from an `InitialProjec
 
 3. **Set project metadata**
    - Adjust `settings.gradle.kts` so `rootProject.name` matches the new app name.
-   - Ensure the shared Android application plugin sets `applicationId = "me.matsumo.koto"`.
+   - Ensure the shared Android application plugin sets `applicationId = "me.matsumo.zencall"`.
 
 4. **Configure signing and SDK access**
    - If the template expects a release keystore, either supply an existing one or generate a placeholder:
@@ -78,7 +78,7 @@ This document is a checklist for rebuilding a new project from an `InitialProjec
    - Search for leftover references to the original app:
      ```bash
      rg "Grabee" --glob '!**/build/**'
-     rg "me.matsumo.grabee" --glob '!**/build/**'
+     rg "me.matsumo.zencall" --glob '!**/build/**'
      ```
      Both commands should return no results.
    - Confirm generated artifacts (APKs, bundles) use the new identifiers by inspecting `build/outputs` if necessary.
