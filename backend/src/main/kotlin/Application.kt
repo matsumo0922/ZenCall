@@ -23,7 +23,7 @@ fun Application.module() {
     }
     install(Resources)
     install(CallLogging)
-    //initKoin()
+    initKoin()
     routes()
 }
 

@@ -11,8 +11,6 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 fun Application.initKoin() {
-    logger.info("Supabase client initializing")
-
     val supabaseClient = createSupabaseClient(
         supabaseUrl = environment.config.propertyOrNull("ktor.security.supabaseUrl")?.getString()!!,
         supabaseKey = environment.config.propertyOrNull("ktor.security.supabaseKey")?.getString()!!,
