@@ -1,5 +1,4 @@
 
-import io.github.aakira.napier.Napier
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -12,6 +11,8 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 fun Application.initKoin() {
+    logger.info("Supabase client initializing")
+
     val supabaseClient = createSupabaseClient(
         supabaseUrl = environment.config.propertyOrNull("ktor.security.supabaseUrl")?.getString()!!,
         supabaseKey = environment.config.propertyOrNull("ktor.security.supabaseKey")?.getString()!!,
@@ -20,7 +21,7 @@ fun Application.initKoin() {
         install(Postgrest)
     }
 
-    Napier.i("Supabase client initialized. url:${supabaseClient.supabaseUrl}, key:${supabaseClient.supabaseKey}")
+    logger.info("Supabase client initialized. url:${supabaseClient.supabaseUrl}, key:${supabaseClient.supabaseKey}")
 
     install(Koin) {
         slf4jLogger()

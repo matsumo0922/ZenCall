@@ -6,7 +6,7 @@ plugins {
     id("matsumo.primitive.detekt")
 }
 
-group = "me.matsumo.blog.backend"
+group = "me.matsumo.zencall.backend"
 version = "0.0.1"
 
 application {
@@ -20,7 +20,7 @@ application {
     applicationDefaultJvmArgs = listOfNotNull(
         localProperties.getJvmArg("SUPABASE_URL"),
         localProperties.getJvmArg("SUPABASE_KEY"),
-        localProperties.getJvmArg("PORT", propertyKey = "BACKEND_PORT"),
+        localProperties.getJvmArg("PORT", propertyKey = "PORT", defaultValue = "8080"),
         localProperties.getJvmArg("REVISION", defaultValue = "UNKNOWN"),
     )
 }

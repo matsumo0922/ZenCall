@@ -6,9 +6,12 @@ import io.ktor.server.netty.EngineMain
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.resources.Resources
+import io.ktor.util.logging.KtorSimpleLogger
 import kotlinx.serialization.Serializable
 import me.matsumo.zencall.core.common.formatter
 import route.revisionRoute
+
+val logger = KtorSimpleLogger("ZenCall")
 
 fun main(args: Array<String>) {
     EngineMain.main(args)
@@ -20,7 +23,7 @@ fun Application.module() {
     }
     install(Resources)
     install(CallLogging)
-    initKoin()
+    //initKoin()
     routes()
 }
 
