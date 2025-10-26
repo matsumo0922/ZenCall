@@ -20,6 +20,7 @@ class KmpBackendPlugin : Plugin<Project> {
                 val supabaseBom = libs.library("supabase-bom")
                 "implementation"(libs.bundle("ktor-server"))
                 "implementation"(project.dependencies.platform(supabaseBom))
+                "implementation"(libs.bundle("supabase"))
             }
         }
     }

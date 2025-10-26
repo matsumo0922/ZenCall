@@ -17,7 +17,6 @@ kotlin {
             implementation(project(":core:model"))
             implementation(project(":core:common"))
             implementation(project(":core:datasource"))
-            implementation(project(":core:resource"))
 
             implementation(libs.bundles.ktor.client)
         }

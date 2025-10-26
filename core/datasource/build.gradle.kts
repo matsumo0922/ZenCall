@@ -21,7 +21,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:model"))
-            implementation(project(":core:resource"))
 
             api(libs.bundles.filekit)
             api(libs.androidx.datastore.preferences)

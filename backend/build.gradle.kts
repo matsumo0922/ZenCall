@@ -30,8 +30,6 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:datasource"))
     implementation(project(":core:repository"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:resource"))
 
     implementation(libs.bundles.koin.server)
     implementation(libs.bundles.ktor.client)

@@ -8,6 +8,7 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.resources.Resources
 import kotlinx.serialization.Serializable
 import me.matsumo.zencall.core.common.formatter
+import route.revisionRoute
 
 fun main(args: Array<String>) {
     EngineMain.main(args)
@@ -19,12 +20,12 @@ fun Application.module() {
     }
     install(Resources)
     install(CallLogging)
-    // initKoin()
+    initKoin()
     routes()
 }
 
 fun Application.routes() {
-
+    revisionRoute()
 }
 
 @Serializable

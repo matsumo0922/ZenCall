@@ -278,6 +278,12 @@ koin-server = [
     "koin-logger-slf4j",
 ]
 
+supabase = [
+    "supabase-postgrest",
+    "supabase-auth",
+    "supabase-compose-auth",
+]
+
 calf = [
     "calf-ui",
     "calf-permission",
