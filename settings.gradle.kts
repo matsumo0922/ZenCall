@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":backend")
 include(":core:common")
 include(":core:ui")
 include(":core:datasource")

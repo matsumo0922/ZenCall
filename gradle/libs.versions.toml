@@ -12,19 +12,19 @@ compileSdk = "36"
 gradle = "8.12.3"
 
 # Kotlin
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 
 # KotlinX
 kotlinxCoroutines = "1.10.2"
 kotlinxDatetime = "0.7.1"
-kotlinxSerializationJson = "1.8.1"
+kotlinxSerializationJson = "1.9.0"
 kotlinxImmutable = "0.4.0"
 
 # KMP
-kmpCompose = "1.9.0-beta03"
+kmpCompose = "1.9.1"
 kmpComplete = "1.1.0"
 kmpLifecycle = "2.9.2"
-kmpNavigation = "2.9.0-beta05"
+kmpNavigation = "2.9.1"
 kmpPurchase = "2.1.0+16.2.0"
 kmpPurchaseCommon = "14.0.2"
 adaptive = "1.1.2"
@@ -37,34 +37,35 @@ androidxActivity = "1.11.0"
 androidxFragment = "1.8.9"
 androidxDataStore = "1.1.7"
 androidxAnnotation = "1.9.1"
-compose = "2025.09.00"
+compose = "2025.10.01"
 
 # Google
 playReview = "2.0.2"
 playUpdate = "2.1.0"
 playServiceAds = "24.5.0"
-ksp = "2.2.10-2.0.2"
-gms = "4.4.3"
+ksp = "2.2.20-2.0.3"
+gms = "4.4.4"
 
 # Firebase
-firebase = "34.1.0"
+firebase = "34.4.0"
 firebaseCrashlytics = "3.0.6"
 
 # koin
-koin = "4.1.0"
+koin = "4.1.1"
 
 # UI
 calf = "0.8.0"
-zoomable = "2.8.1"
-kolor = "3.0.1"
+zoomable = "2.8.2"
+kolor = "4.0.2"
 colorPicker = "1.1.2"
 
 # Others
-ktor = "3.2.1"
-coil3 = "3.2.0"
-filekit = "0.10.0-beta04"
+ktor = "3.3.1"
+supabase = "3.2.5"
+coil3 = "3.3.0"
+filekit = "0.10.0"
 detekt = "1.23.8"
-libraries = "12.2.4"
+libraries = "13.1.0"
 buildKonfig = "0.17.1"
 twitterComposeRule = "0.0.26"
 
@@ -78,6 +79,7 @@ kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
 libraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "libraries" }
@@ -157,8 +159,10 @@ koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-startup = { module = "io.insert-koin:koin-androidx-startup", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 
-# Ktor
+# Ktor Client
 ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -166,6 +170,22 @@ ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktot-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
+# Ktor Backend
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-jvm = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktor-sever-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+
+# Supabase
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
+supabase-compose-auth = { module = "io.github.jan-tennert.supabase:compose-auth" }
 
 # UI
 calf-ui = { module = "com.mohamedrejeb.calf:calf-ui", version.ref = "calf" }
@@ -227,7 +247,7 @@ purchase = [
     "purchases-result",
 ]
 
-ktor = [
+ktor-client = [
     "ktor-core",
     "ktor-cio",
     "ktor-content-negotiation",
@@ -235,10 +255,27 @@ ktor = [
     "ktot-logging",
 ]
 
-koin = [
+ktor-server = [
+    "ktor-server-core",
+    "ktor-server-jvm",
+    "ktor-server-netty",
+    "ktor-server-config-yaml",
+    "ktor-server-content-negotiation",
+    "ktor-server-resources",
+    "ktor-server-cors",
+    "ktor-sever-call-logging",
+]
+
+koin-client = [
     "koin-core",
     "koin-compose",
     "koin-compose-viewmodel",
+]
+
+koin-server = [
+    "koin-core",
+    "koin-ktor",
+    "koin-logger-slf4j",
 ]
 
 calf = [

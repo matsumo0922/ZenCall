@@ -3,6 +3,7 @@ plugins {
     id("matsumo.primitive.android.library")
     id("matsumo.primitive.kmp.android")
     id("matsumo.primitive.kmp.ios")
+    id("matsumo.primitive.kmp.jvm")
     id("matsumo.primitive.detekt")
 }
 
@@ -16,7 +17,7 @@ kotlin {
             api(project.dependencies.platform(libs.koin.bom))
 
             api(libs.bundles.infra)
-            api(libs.bundles.koin)
+            api(libs.bundles.koin.client)
         }
 
         androidMain.dependencies {

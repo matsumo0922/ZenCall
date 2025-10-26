@@ -3,6 +3,7 @@ plugins {
     id("matsumo.primitive.android.library")
     id("matsumo.primitive.kmp.android")
     id("matsumo.primitive.kmp.ios")
+    id("matsumo.primitive.kmp.jvm")
     id("matsumo.primitive.detekt")
 }
 
@@ -18,7 +19,7 @@ kotlin {
             implementation(project(":core:datasource"))
             implementation(project(":core:resource"))
 
-            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.ktor.client)
         }
 
         androidMain.dependencies {
