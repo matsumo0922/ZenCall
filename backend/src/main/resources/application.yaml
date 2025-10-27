@@ -7,4 +7,5 @@ ktor:
   security:
     supabaseUrl: $SUPABASE_URL
     supabaseKey: $SUPABASE_KEY
+    googleClientId: $GOOGLE_CLIENT_ID
     revision: $REVISION

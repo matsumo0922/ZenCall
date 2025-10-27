@@ -20,7 +20,8 @@ application {
     applicationDefaultJvmArgs = listOfNotNull(
         localProperties.getJvmArg("SUPABASE_URL"),
         localProperties.getJvmArg("SUPABASE_KEY"),
-        localProperties.getJvmArg("PORT", propertyKey = "PORT", defaultValue = "8080"),
+        localProperties.getJvmArg("PORT", defaultValue = "8080"),
+        localProperties.getJvmArg("GOOGLE_CLIENT_ID", defaultValue = ""),
         localProperties.getJvmArg("REVISION", defaultValue = "UNKNOWN"),
     )
 }
