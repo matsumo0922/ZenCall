@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AppBarWithSearch
 import androidx.compose.material3.ExpandedFullScreenSearchBar
@@ -58,7 +58,7 @@ internal fun HomeTopAppBar(
             actions = {
                 IconButton(openDrawer) {
                     Icon(
-                        imageVector = Icons.Default.Person,
+                        imageVector = Icons.Default.AccountCircle,
                         contentDescription = null,
                     )
                 }
