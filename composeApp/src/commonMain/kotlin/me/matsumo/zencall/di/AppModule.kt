@@ -38,12 +38,6 @@ val appModule = module {
                 adMobBannerAdUnitId = BuildKonfig.ADMOB_IOS_BANNER_AD_UNIT_ID
                 adMobInterstitialAdUnitId = BuildKonfig.ADMOB_IOS_INTERSTITIAL_AD_UNIT_ID
             }
-
-            else -> {
-                adMobAppId = ""
-                adMobBannerAdUnitId = ""
-                adMobInterstitialAdUnitId = ""
-            }
         }
 
         AppConfig(
@@ -55,6 +49,9 @@ val appModule = module {
             adMobAppId = adMobAppId,
             adMobBannerAdUnitId = adMobBannerAdUnitId,
             adMobInterstitialAdUnitId = adMobInterstitialAdUnitId,
+            supabaseUrl = BuildKonfig.SUPABASE_URL,
+            supabaseKey = BuildKonfig.SUPABASE_KEY,
+            googleClientId = BuildKonfig.GOOGLE_CLIENT_ID,
         )
     }
 

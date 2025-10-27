@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import me.matsumo.zencall.core.model.Destination
 import me.matsumo.zencall.core.ui.theme.LocalNavController
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

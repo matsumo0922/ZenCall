@@ -4,7 +4,6 @@ plugins {
     id("matsumo.primitive.kmp.compose")
     id("matsumo.primitive.kmp.android")
     id("matsumo.primitive.kmp.ios")
-    id("matsumo.primitive.kmp.jvm")
     id("matsumo.primitive.detekt")
 }
 

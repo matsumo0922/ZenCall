@@ -3,7 +3,6 @@ plugins {
     id("matsumo.primitive.android.library")
     id("matsumo.primitive.kmp.android")
     id("matsumo.primitive.kmp.ios")
-    id("matsumo.primitive.kmp.jvm")
     id("matsumo.primitive.detekt")
 }
 
@@ -22,6 +21,8 @@ kotlin {
             implementation(project(":core:common"))
             implementation(project(":core:model"))
 
+            api(project.dependencies.platform(libs.supabase.bom))
+            api(libs.bundles.supabase)
             api(libs.bundles.filekit)
             api(libs.androidx.datastore.preferences)
         }
