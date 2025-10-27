@@ -8,7 +8,7 @@ import me.matsumo.zencall.core.model.Destination
 
 fun NavGraphBuilder.homeScreen() {
     composable<Destination.Home> {
-        HomeScreen(
+        HomeRoute(
             modifier = Modifier.fillMaxSize(),
         )
     }
