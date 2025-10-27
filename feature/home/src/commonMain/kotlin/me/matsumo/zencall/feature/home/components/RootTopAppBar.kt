@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AppBarWithSearch
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExpandedFullScreenSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,13 +34,20 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeTopAppBar(
+internal fun RootTopAppBar(
     scrollBehavior: SearchBarScrollBehavior,
-    openDrawer: () -> Unit,
+    drawerState: DrawerState,
     modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
     val searchBarState = rememberSearchBarState()
     val textFieldState = rememberTextFieldState()
+
+    fun openDrawer() {
+        scope.launch {
+            drawerState.open()
+        }
+    }
 
     Column(
         modifier = modifier,
@@ -48,7 +56,7 @@ internal fun HomeTopAppBar(
             state = searchBarState,
             scrollBehavior = scrollBehavior,
             navigationIcon = {
-                IconButton(openDrawer) {
+                IconButton(::openDrawer) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = null,
@@ -56,7 +64,7 @@ internal fun HomeTopAppBar(
                 }
             },
             actions = {
-                IconButton(openDrawer) {
+                IconButton(::openDrawer) {
                     Icon(
                         imageVector = Icons.Default.AccountCircle,
                         contentDescription = null,

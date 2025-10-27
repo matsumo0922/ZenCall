@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Destination {
     @Serializable
-    data object Home : Destination
+    data object Root : Destination
 
     @Serializable
     sealed interface Setting : Destination {

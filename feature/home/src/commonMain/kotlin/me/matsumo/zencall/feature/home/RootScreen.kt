@@ -1,44 +1,43 @@
 package me.matsumo.zencall.feature.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import me.matsumo.zencall.feature.home.components.HomeTopAppBar
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import me.matsumo.zencall.feature.home.child.account.accountScreen
+import me.matsumo.zencall.feature.home.child.home.homeScreen
+import me.matsumo.zencall.feature.home.components.HomeDestination
+import me.matsumo.zencall.feature.home.components.RootBottomNavigationBar
+import me.matsumo.zencall.feature.home.components.RootTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-internal fun HomeRoute(
+internal fun RootRoute(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: RootViewModel = koinViewModel(),
 ) {
-    HomeScreen(
+    RootScreen(
         modifier = Modifier.fillMaxSize()
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+private fun RootScreen(
     modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
+    val navHostController = rememberNavController()
 
     ModalNavigationDrawer(
         modifier = modifier,
@@ -50,34 +49,28 @@ private fun HomeScreen(
         Scaffold(
             modifier = modifier,
             topBar = {
-                HomeTopAppBar(
+                RootTopAppBar(
+                    modifier = Modifier.fillMaxWidth(),
                     scrollBehavior = scrollBehavior,
-                    openDrawer = {
-                        scope.launch {
-                            drawerState.open()
-                        }
-                    },
+                    drawerState = drawerState,
                 )
             },
             bottomBar = {
-
+                RootBottomNavigationBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    navController = navHostController,
+                )
             }
         ) {
-            LazyColumn(
+            NavHost(
                 modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .fillMaxSize()
+                    .padding(it),
+                navController = navHostController,
+                startDestination = HomeDestination.Home
             ) {
-                items(100) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        text = "Item #$it",
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
+                homeScreen()
+                accountScreen()
             }
         }
     }

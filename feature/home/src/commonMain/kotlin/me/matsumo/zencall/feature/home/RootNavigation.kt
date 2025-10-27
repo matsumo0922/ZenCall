@@ -6,9 +6,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import me.matsumo.zencall.core.model.Destination
 
-fun NavGraphBuilder.homeScreen() {
-    composable<Destination.Home> {
-        HomeRoute(
+fun NavGraphBuilder.rootScreen() {
+    composable<Destination.Root> {
+        RootRoute(
             modifier = Modifier.fillMaxSize(),
         )
     }

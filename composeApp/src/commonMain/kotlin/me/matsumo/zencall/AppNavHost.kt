@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import me.matsumo.zencall.core.model.Destination
 import me.matsumo.zencall.core.ui.theme.LocalNavController
-import me.matsumo.zencall.feature.home.homeScreen
+import me.matsumo.zencall.feature.home.rootScreen
 import me.matsumo.zencall.feature.setting.oss.settingLicenseScreen
 import me.matsumo.zencall.feature.setting.settingScreen
 
@@ -18,9 +18,9 @@ internal fun AppNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Destination.Home,
+        startDestination = Destination.Root,
     ) {
-        homeScreen()
+        rootScreen()
         settingScreen()
         settingLicenseScreen()
     }
