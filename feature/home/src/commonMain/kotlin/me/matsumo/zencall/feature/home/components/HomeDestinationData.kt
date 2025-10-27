@@ -11,7 +11,6 @@ import me.matsumo.zencall.core.resource.Res
 import me.matsumo.zencall.core.resource.home_menu_account
 import me.matsumo.zencall.core.resource.home_menu_home
 import org.jetbrains.compose.resources.StringResource
-import kotlin.reflect.KClass
 
 @Serializable
 sealed interface HomeDestination {
@@ -26,18 +25,18 @@ enum class HomeDestinationData(
     val selectedIcon: ImageVector,
     val deselectedIcon: ImageVector,
     val title: StringResource,
-    val route: KClass<out HomeDestination>,
+    val route: HomeDestination,
 ) {
     Home(
         selectedIcon = Icons.Default.Home,
         deselectedIcon = Icons.Outlined.Home,
         title = Res.string.home_menu_home,
-        route = HomeDestination.Home::class,
+        route = HomeDestination.Home,
     ),
     Account(
         selectedIcon = Icons.Default.AccountCircle,
         deselectedIcon = Icons.Outlined.AccountCircle,
         title = Res.string.home_menu_account,
-        route = HomeDestination.Account::class,
+        route = HomeDestination.Account,
     )
 }

@@ -30,7 +30,7 @@ internal fun RootBottomNavigationBar(
     NavigationBar(modifier) {
         HomeDestinationData.entries.forEach { destination ->
             val isSelected by remember(destination) {
-                derivedStateOf { currentHierarchy?.any { it.hasRoute(destination.route) } ?: false }
+                derivedStateOf { currentHierarchy?.any { it.hasRoute(destination.route::class) } ?: false }
             }
 
             NavigationBarItem(
