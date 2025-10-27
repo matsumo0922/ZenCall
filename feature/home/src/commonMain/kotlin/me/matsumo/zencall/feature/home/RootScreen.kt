@@ -7,7 +7,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import me.matsumo.zencall.feature.home.child.account.accountScreen
 import me.matsumo.zencall.feature.home.child.home.homeScreen
 import me.matsumo.zencall.feature.home.components.HomeDestination
 import me.matsumo.zencall.feature.home.components.RootBottomNavigationBar
+import me.matsumo.zencall.feature.home.components.RootDrawer
 import me.matsumo.zencall.feature.home.components.RootTopAppBar
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -36,14 +36,16 @@ private fun RootScreen(
     modifier: Modifier = Modifier,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
     val navHostController = rememberNavController()
 
     ModalNavigationDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-
+            RootDrawer(
+                state = drawerState,
+                localNavController = navHostController,
+            )
         }
     ) {
         Scaffold(
@@ -51,7 +53,6 @@ private fun RootScreen(
             topBar = {
                 RootTopAppBar(
                     modifier = Modifier.fillMaxWidth(),
-                    scrollBehavior = scrollBehavior,
                     drawerState = drawerState,
                 )
             },

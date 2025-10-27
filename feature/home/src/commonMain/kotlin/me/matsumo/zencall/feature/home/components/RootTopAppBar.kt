@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AppBarWithSearch
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExpandedFullScreenSearchBar
@@ -20,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.SearchBarScrollBehavior
 import androidx.compose.material3.SearchBarState
 import androidx.compose.material3.SearchBarValue
 import androidx.compose.material3.Text
@@ -31,11 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import me.matsumo.zencall.core.resource.Res
+import me.matsumo.zencall.core.resource.home_search_bar_placeholder
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RootTopAppBar(
-    scrollBehavior: SearchBarScrollBehavior,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
 ) {
@@ -50,11 +50,10 @@ internal fun RootTopAppBar(
     }
 
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(bottom = 8.dp),
     ) {
         AppBarWithSearch(
             state = searchBarState,
-            scrollBehavior = scrollBehavior,
             navigationIcon = {
                 IconButton(::openDrawer) {
                     Icon(
@@ -76,7 +75,7 @@ internal fun RootTopAppBar(
                     searchBarState = searchBarState,
                     textFieldState = textFieldState,
                 )
-            }
+            },
         )
 
         ExpandedFullScreenSearchBar(
@@ -128,16 +127,10 @@ internal fun InputField(
             if (searchBarState.currentValue == SearchBarValue.Collapsed) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Search",
+                    text = stringResource(Res.string.home_search_bar_placeholder),
                     textAlign = TextAlign.Center,
                 )
             }
         },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-            )
-        }
     )
 }

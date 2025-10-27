@@ -8,6 +8,9 @@ sealed interface Destination {
     data object Root : Destination
 
     @Serializable
+    data object About: Destination
+
+    @Serializable
     sealed interface Setting : Destination {
         @Serializable
         data object Root : Setting

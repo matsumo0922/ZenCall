@@ -55,9 +55,9 @@
     <string name="home_title">証明写真</string>
     <string name="home_menu_home">ホーム</string>
     <string name="home_menu_account">アカウント</string>
-    <string name="home_buy_plus_button">広告を削除</string>
-    <string name="home_purchase_expired">プラン失効</string>
-    <string name="home_purchase_expired_description">プランが失効したため、通常ユーザーに戻りました。\n\n意図していない場合は支払いに失敗している可能性があります。ストアアプリより、プランの状況をご確認ください。</string>
+    <string name="home_menu_setting">設定</string>
+    <string name="home_menu_about">アプリについて</string>
+    <string name="home_search_bar_placeholder">電話番号を検索</string>
 
     <!-- Billing -->
     <string name="billing_title">Buy Plus+</string>
