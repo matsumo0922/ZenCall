@@ -1,4 +1,4 @@
-package me.matsumo.zencall.core.datasource
+package me.matsumo.zencall.core.datasource.api
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

@@ -18,8 +18,8 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import me.matsumo.zencall.core.common.formatter
 import me.matsumo.zencall.core.datasource.AppSettingDataSource
-import me.matsumo.zencall.core.datasource.JpPhoneNumberApi
-import me.matsumo.zencall.core.datasource.PhoneNumberParseApi
+import me.matsumo.zencall.core.datasource.api.JpPhoneNumberApi
+import me.matsumo.zencall.core.datasource.api.PhoneNumberParseApi
 import me.matsumo.zencall.core.model.AppConfig
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
