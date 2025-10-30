@@ -24,6 +24,8 @@ kotlin {
             api(project.dependencies.platform(libs.supabase.bom))
             api(libs.bundles.supabase)
             api(libs.bundles.filekit)
+            api(libs.bundles.ktor.client)
+            api(libs.bundles.ksoup)
             api(libs.androidx.datastore.preferences)
         }
     }

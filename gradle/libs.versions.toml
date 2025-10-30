@@ -66,6 +66,7 @@ coil3 = "3.3.0"
 filekit = "0.10.0"
 detekt = "1.23.8"
 libraries = "13.1.0"
+ksoup = "0.2.5"
 buildKonfig = "0.17.1"
 twitterComposeRule = "0.0.26"
 
@@ -208,6 +209,8 @@ coil3-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = 
 desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.5" }
 libraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "libraries" }
 libraries-ui = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "libraries" }
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+ksoup-ktor = { module = "com.fleeksoft.ksoup:ksoup-network", version.ref = "ksoup" }
 
 # Debugs
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
@@ -303,4 +306,9 @@ filekit = [
     "filekit-core",
     "filekit-dialogs",
     "filekit-coil",
+]
+
+ksoup = [
+    "ksoup",
+    "ksoup-ktor",
 ]
