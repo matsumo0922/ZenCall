@@ -31,16 +31,6 @@ internal fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(100) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    text = "Item #$it",
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            }
-
             items(
                 count = pagingAdapter.itemCount,
                 key = pagingAdapter.itemKey { it.id },

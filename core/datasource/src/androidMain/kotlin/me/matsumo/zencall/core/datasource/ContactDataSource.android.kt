@@ -2,6 +2,7 @@ package me.matsumo.zencall.core.datasource
 
 import android.content.Context
 import android.net.Uri
+import android.os.Bundle
 import android.provider.ContactsContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -22,30 +23,35 @@ class AndroidContactsDataSource(
             ContactsContract.Contacts.HAS_PHONE_NUMBER,
         )
         val appliedOffset = offset.coerceAtLeast(0)
-        val sortOrder = buildString {
-            append("${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} ASC LIMIT $limit")
-            if (appliedOffset > 0) {
-                append(" OFFSET ")
-                append(appliedOffset)
-            }
+        val queryArgs = Bundle().apply {
+            putStringArray(
+                android.content.ContentResolver.QUERY_ARG_SORT_COLUMNS,
+                arrayOf(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY),
+            )
+            putInt(
+                android.content.ContentResolver.QUERY_ARG_SORT_DIRECTION,
+                android.content.ContentResolver.QUERY_SORT_DIRECTION_ASCENDING,
+            )
+            putInt(android.content.ContentResolver.QUERY_ARG_LIMIT, limit)
+            putInt(android.content.ContentResolver.QUERY_ARG_OFFSET, appliedOffset)
         }
-
-        resolver.query(
+        val cursor = resolver.query(
             ContactsContract.Contacts.CONTENT_URI,
             projection,
+            queryArgs,
             null,
-            null,
-            sortOrder,
-        )?.use { cursor ->
-            val idIndex = cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID)
-            val nameIndex = cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
-            val hasNumberIndex = cursor.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)
+        )
+
+        cursor?.use { c ->
+            val idIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts._ID)
+            val nameIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
+            val hasNumberIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)
 
             buildList {
-                while (cursor.moveToNext()) {
-                    val contactId = cursor.getLong(idIndex)
-                    val displayName = cursor.getString(nameIndex)?.takeIf { it.isNotBlank() } ?: ""
-                    val hasPhoneNumber = cursor.getInt(hasNumberIndex) > 0
+                while (c.moveToNext()) {
+                    val contactId = c.getLong(idIndex)
+                    val displayName = c.getString(nameIndex)?.takeIf { it.isNotBlank() } ?: ""
+                    val hasPhoneNumber = c.getInt(hasNumberIndex) > 0
 
                     val phoneNumbers = if (hasPhoneNumber) {
                         loadPhoneNumbers(resolver, contactId)
@@ -60,6 +66,9 @@ class AndroidContactsDataSource(
                             phoneNumbers = phoneNumbers,
                         ),
                     )
+                    if (size >= limit) {
+                        break
+                    }
                 }
             }
         } ?: emptyList()

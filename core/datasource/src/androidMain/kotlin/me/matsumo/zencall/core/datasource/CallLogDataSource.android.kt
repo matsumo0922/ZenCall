@@ -1,6 +1,7 @@
 package me.matsumo.zencall.core.datasource
 
 import android.content.Context
+import android.os.Bundle
 import android.provider.CallLog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -24,36 +25,41 @@ class AndroidCallLogDataSource(
             CallLog.Calls.DURATION,
         )
         val appliedOffset = offset.coerceAtLeast(0)
-        val sortOrder = buildString {
-            append("${CallLog.Calls.DATE} DESC LIMIT $limit")
-            if (appliedOffset > 0) {
-                append(" OFFSET ")
-                append(appliedOffset)
-            }
+        val queryArgs = Bundle().apply {
+            putStringArray(
+                android.content.ContentResolver.QUERY_ARG_SORT_COLUMNS,
+                arrayOf(CallLog.Calls.DATE),
+            )
+            putInt(
+                android.content.ContentResolver.QUERY_ARG_SORT_DIRECTION,
+                android.content.ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
+            )
+            putInt(android.content.ContentResolver.QUERY_ARG_LIMIT, limit)
+            putInt(android.content.ContentResolver.QUERY_ARG_OFFSET, appliedOffset)
         }
-
-        resolver.query(
+        val cursor = resolver.query(
             CallLog.Calls.CONTENT_URI,
             projection,
+            queryArgs,
             null,
-            null,
-            sortOrder,
-        )?.use { cursor ->
-            val idIndex = cursor.getColumnIndexOrThrow(CallLog.Calls._ID)
-            val numberIndex = cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER)
-            val cachedNameIndex = cursor.getColumnIndexOrThrow(CallLog.Calls.CACHED_NAME)
-            val typeIndex = cursor.getColumnIndexOrThrow(CallLog.Calls.TYPE)
-            val dateIndex = cursor.getColumnIndexOrThrow(CallLog.Calls.DATE)
-            val durationIndex = cursor.getColumnIndexOrThrow(CallLog.Calls.DURATION)
+        )
+
+        cursor?.use { c ->
+            val idIndex = c.getColumnIndexOrThrow(CallLog.Calls._ID)
+            val numberIndex = c.getColumnIndexOrThrow(CallLog.Calls.NUMBER)
+            val cachedNameIndex = c.getColumnIndexOrThrow(CallLog.Calls.CACHED_NAME)
+            val typeIndex = c.getColumnIndexOrThrow(CallLog.Calls.TYPE)
+            val dateIndex = c.getColumnIndexOrThrow(CallLog.Calls.DATE)
+            val durationIndex = c.getColumnIndexOrThrow(CallLog.Calls.DURATION)
 
             buildList {
-                while (cursor.moveToNext()) {
-                    val id = cursor.getLong(idIndex)
-                    val number = cursor.getString(numberIndex)
-                    val cachedName = cursor.getString(cachedNameIndex)
-                    val typeValue = cursor.getInt(typeIndex)
-                    val dateMillis = cursor.getLong(dateIndex)
-                    val duration = cursor.getInt(durationIndex)
+                while (c.moveToNext()) {
+                    val id = c.getLong(idIndex)
+                    val number = c.getString(numberIndex)
+                    val cachedName = c.getString(cachedNameIndex)
+                    val typeValue = c.getInt(typeIndex)
+                    val dateMillis = c.getLong(dateIndex)
+                    val duration = c.getInt(durationIndex)
 
                     add(
                         CallLogModel(
@@ -65,6 +71,9 @@ class AndroidCallLogDataSource(
                             durationSec = duration,
                         ),
                     )
+                    if (size >= limit) {
+                        break
+                    }
                 }
             }
         } ?: emptyList()
