@@ -17,7 +17,7 @@ class JpPhoneNumberApi(
         val url = "$JP_PHONE_NUMBER_BASE_URL/numberinfo_$normalizedPhoneNumber.html"
 
         val document = Ksoup.parseGetRequest(url, httpClient = httpClient)
-        val result = JpPhoneNumberParser.parse(document)
+        val result = JpPhoneNumberParser.parseDetail(document)
 
         Napier.d { "document: $result" }
     }

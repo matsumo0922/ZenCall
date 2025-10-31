@@ -10,7 +10,7 @@ internal class RootViewModel(
 ) : ViewModel() {
     init {
         viewModelScope.launch {
-            phoneNumberRepository.getDetail("0120964886")
+            phoneNumberRepository.getDetail("0570005042")
         }
     }
 }

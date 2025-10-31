@@ -10,6 +10,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
 import me.matsumo.zencall.core.common.formatter
 import me.matsumo.zencall.core.model.number.PhoneDetail
+import me.matsumo.zencall.core.model.number.PhoneReview
 
 object JpPhoneNumberParser {
 
@@ -52,10 +53,9 @@ object JpPhoneNumberParser {
 
     /** div.frame-728-green-l（基本情報）からヘッダ／カウント／種別などを抜く */
     private fun parseBasicInfo(doc: Document): Triple<String, Map<String, String>, Pair<Int?, Int?>> {
-        // 頭番号・中間番号・加入者番号はテーブルのラベルから拾う
-        val head = doc.cellTextByLabel("頭番号") ?: ""
-        val middle = doc.cellTextByLabel("中間番号") ?: ""
-        val subscriber = doc.cellTextByLabel("加入者番号") ?: ""
+        val head = doc.cellTextByLabel("頭番号") ?: doc.cellTextByLabel("市外局番").orEmpty()
+        val middle = doc.cellTextByLabel("中間番号") ?: doc.cellTextByLabel("市内局番").orEmpty()
+        val subscriber = doc.cellTextByLabel("加入者番号").orEmpty()
 
         val access = doc.cellTextByLabel("アクセス回数")?.filter { it.isDigit() }?.toIntOrNull()
         val search = doc.cellTextByLabel("検索回数")?.filter { it.isDigit() }?.toIntOrNull()
@@ -67,6 +67,7 @@ object JpPhoneNumberParser {
             "numberType" to (doc.cellTextByLabel("番号種類") ?: ""),
             "provider" to (doc.cellTextByLabel("番号提供事業者") ?: "")
         )
+
         return Triple("$head$middle$subscriber", map, access to search)
     }
 
@@ -83,11 +84,12 @@ object JpPhoneNumberParser {
         if (name == null && category == null && address == null && contact == null && website == null) {
             return null
         }
+
         return PhoneDetail.BusinessInfo(name, category, address, contact, website)
     }
 
     /** 口コミの抽出（ピンク見出しのブロックのみ） */
-    private fun parseReviews(doc: Document): List<PhoneDetail.Review> {
+    private fun parseReviews(doc: Document): List<PhoneReview> {
         return doc.select("div.frame-728-gray-l:has(.title-background-pink)").mapNotNull { box ->
             val user = box.selectFirst(".title-background-pink span.red-dark")?.text()?.trim()
             val timeText = box.selectFirst(".title-background-pink td:matches(\\d{4}/\\d{2}/\\d{2})")
@@ -103,7 +105,7 @@ object JpPhoneNumberParser {
                 .replace(Regex("<[^>]+>"), "") // 最低限のタグ除去
                 .trim()
 
-            PhoneDetail.Review(userName = user, postedAt = postedAt, body = body)
+            PhoneReview(userName = user, postedAt = postedAt, body = body)
         }
     }
 
@@ -140,7 +142,7 @@ object JpPhoneNumberParser {
     }
 
     /** メインのパース関数 */
-    fun parse(doc: Document): PhoneDetail {
+    fun parseDetail(doc: Document): PhoneDetail {
         val (rawPhone, basicMap, counts) = parseBasicInfo(doc)
         val head = basicMap["head"].orEmpty()
         val middle = basicMap["middle"].orEmpty()
