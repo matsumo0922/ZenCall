@@ -1,7 +1,9 @@
 package me.matsumo.zencall.core.datasource.di
 
 import me.matsumo.zencall.core.datasource.AndroidCallLogDataSource
+import me.matsumo.zencall.core.datasource.AndroidContactDataSource
 import me.matsumo.zencall.core.datasource.CallLogDataSource
+import me.matsumo.zencall.core.datasource.ContactDataSource
 import me.matsumo.zencall.core.datasource.helper.PreferenceHelper
 import me.matsumo.zencall.core.datasource.helper.PreferenceHelperImpl
 import org.koin.core.module.Module
@@ -17,6 +19,13 @@ internal actual val dataSourcePlatformModule: Module = module {
 
     single<CallLogDataSource> {
         AndroidCallLogDataSource(
+            context = get(),
+            ioDispatcher = get(),
+        )
+    }
+
+    single<ContactDataSource> {
+        AndroidContactDataSource(
             context = get(),
             ioDispatcher = get(),
         )

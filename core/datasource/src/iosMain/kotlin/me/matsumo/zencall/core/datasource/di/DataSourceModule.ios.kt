@@ -1,7 +1,9 @@
 package me.matsumo.zencall.core.datasource.di
 
 import me.matsumo.zencall.core.datasource.CallLogDataSource
+import me.matsumo.zencall.core.datasource.ContactDataSource
 import me.matsumo.zencall.core.datasource.IosCallLogDataSource
+import me.matsumo.zencall.core.datasource.IosContactDataSource
 import me.matsumo.zencall.core.datasource.helper.PreferenceHelper
 import me.matsumo.zencall.core.datasource.helper.PreferenceHelperImpl
 import org.koin.core.module.Module
@@ -16,5 +18,9 @@ internal actual val dataSourcePlatformModule: Module = module {
 
     single<CallLogDataSource> {
         IosCallLogDataSource()
+    }
+
+    single<ContactDataSource> {
+        IosContactDataSource()
     }
 }
