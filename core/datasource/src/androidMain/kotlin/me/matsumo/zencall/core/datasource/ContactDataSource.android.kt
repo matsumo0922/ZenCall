@@ -1,9 +1,13 @@
 package me.matsumo.zencall.core.datasource
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.matsumo.zencall.core.model.call.ContactInfo
@@ -62,7 +66,7 @@ class AndroidContactsDataSource(
                             id = contactId,
                             displayName = displayName,
                             phoneNumbers = phoneNumbers,
-                            photoUri = photoUri,
+                            photo = loadPhoto(resolver, photoUri)?.asImageBitmap(),
                         ),
                     )
                 }
@@ -106,7 +110,7 @@ class AndroidContactsDataSource(
                     id = contactId,
                     displayName = displayName,
                     phoneNumbers = numbers.ifEmpty { listOf(normalized) },
-                    photoUri = photoUri,
+                    photo = loadPhoto(resolver, photoUri)?.asImageBitmap(),
                 )
             }
         }
@@ -140,5 +144,18 @@ class AndroidContactsDataSource(
         }
 
         return emptyList()
+    }
+
+    private fun loadPhoto(
+        resolver: android.content.ContentResolver,
+        uri: String?,
+    ): Bitmap? {
+        if (uri == null) return null
+
+        return runCatching {
+            resolver.openInputStream(uri.toUri()).use { stream ->
+                BitmapFactory.decodeStream(stream)
+            }
+        }.getOrNull()
     }
 }

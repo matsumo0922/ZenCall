@@ -52,7 +52,7 @@ class AndroidCallLogDataSource(
             val dateIndex = c.getColumnIndexOrThrow(CallLog.Calls.DATE)
             val durationIndex = c.getColumnIndexOrThrow(CallLog.Calls.DURATION)
 
-            buildList {
+            val entries = buildList {
                 while (c.moveToNext()) {
                     val id = c.getLong(idIndex)
                     val number = c.getString(numberIndex)
@@ -76,6 +76,8 @@ class AndroidCallLogDataSource(
                     }
                 }
             }
+
+            entries.sortedByDescending { it.dateMillis }
         } ?: emptyList()
     }
 
