@@ -2,6 +2,7 @@ package me.matsumo.zencall.core.repository.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import me.matsumo.zencall.core.common.utils.suspendRunCatching
 import me.matsumo.zencall.core.model.call.CallLog
 import me.matsumo.zencall.core.repository.ContactsRepository
 
@@ -10,7 +11,7 @@ class CallLogPagingSource(
 ) : PagingSource<Int, CallLog>(){
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CallLog> {
-        return runCatching { contactsRepository.getCallLogs(params.key ?: 0) }.fold(
+        return suspendRunCatching { contactsRepository.getCallLogs(params.key ?: 0) }.fold(
             onSuccess = {
                 LoadResult.Page(
                     data = it,
