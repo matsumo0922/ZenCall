@@ -13,16 +13,14 @@ class AndroidContactsDataSource(
     private val ioDispatcher: CoroutineDispatcher,
 ) : ContactsDataSource {
 
-    override suspend fun getContacts(limit: Int, offset: Int): List<ContactInfo> = withContext(ioDispatcher) {
-        if (limit <= 0) return@withContext emptyList()
-
+    override suspend fun getContacts(): List<ContactInfo> = withContext(ioDispatcher) {
         val resolver = context.contentResolver
         val projection = arrayOf(
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
             ContactsContract.Contacts.HAS_PHONE_NUMBER,
+            ContactsContract.Contacts.PHOTO_URI,
         )
-        val appliedOffset = offset.coerceAtLeast(0)
         val queryArgs = Bundle().apply {
             putStringArray(
                 android.content.ContentResolver.QUERY_ARG_SORT_COLUMNS,
@@ -32,8 +30,6 @@ class AndroidContactsDataSource(
                 android.content.ContentResolver.QUERY_ARG_SORT_DIRECTION,
                 android.content.ContentResolver.QUERY_SORT_DIRECTION_ASCENDING,
             )
-            putInt(android.content.ContentResolver.QUERY_ARG_LIMIT, limit)
-            putInt(android.content.ContentResolver.QUERY_ARG_OFFSET, appliedOffset)
         }
         val cursor = resolver.query(
             ContactsContract.Contacts.CONTENT_URI,
@@ -46,12 +42,14 @@ class AndroidContactsDataSource(
             val idIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts._ID)
             val nameIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
             val hasNumberIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)
+            val photoUriIndex = c.getColumnIndexOrThrow(ContactsContract.Contacts.PHOTO_URI)
 
             buildList {
                 while (c.moveToNext()) {
                     val contactId = c.getLong(idIndex)
                     val displayName = c.getString(nameIndex)?.takeIf { it.isNotBlank() } ?: ""
                     val hasPhoneNumber = c.getInt(hasNumberIndex) > 0
+                    val photoUri = c.getString(photoUriIndex)
 
                     val phoneNumbers = if (hasPhoneNumber) {
                         loadPhoneNumbers(resolver, contactId)
@@ -64,11 +62,9 @@ class AndroidContactsDataSource(
                             id = contactId,
                             displayName = displayName,
                             phoneNumbers = phoneNumbers,
+                            photoUri = photoUri,
                         ),
                     )
-                    if (size >= limit) {
-                        break
-                    }
                 }
             }
         } ?: emptyList()
@@ -82,6 +78,7 @@ class AndroidContactsDataSource(
         val projection = arrayOf(
             ContactsContract.PhoneLookup._ID,
             ContactsContract.PhoneLookup.DISPLAY_NAME,
+            ContactsContract.PhoneLookup.PHOTO_URI,
         )
         val uri: Uri = Uri.withAppendedPath(
             ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
@@ -97,16 +94,19 @@ class AndroidContactsDataSource(
         )?.use { cursor ->
             val idIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID)
             val nameIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME)
+            val photoIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.PHOTO_URI)
 
             if (cursor.moveToFirst()) {
                 val contactId = cursor.getLong(idIndex)
                 val displayName = cursor.getString(nameIndex)?.takeIf { it.isNotBlank() } ?: ""
                 val numbers = loadPhoneNumbers(resolver, contactId)
+                val photoUri = cursor.getString(photoIndex)
 
                 return@withContext ContactInfo(
                     id = contactId,
                     displayName = displayName,
                     phoneNumbers = numbers.ifEmpty { listOf(normalized) },
+                    photoUri = photoUri,
                 )
             }
         }
@@ -114,7 +114,10 @@ class AndroidContactsDataSource(
         null
     }
 
-    private fun loadPhoneNumbers(resolver: android.content.ContentResolver, contactId: Long): List<String> {
+    private fun loadPhoneNumbers(
+        resolver: android.content.ContentResolver,
+        contactId: Long,
+    ): List<String> {
         val projection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
 
         resolver.query(

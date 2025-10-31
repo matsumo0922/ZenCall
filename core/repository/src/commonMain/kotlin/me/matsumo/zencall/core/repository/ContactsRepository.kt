@@ -20,6 +20,8 @@ class ContactsRepository(
 ) {
     private val scope = CoroutineScope(ioDispatcher + SupervisorJob())
 
+    suspend fun getContacts() = contactsDataSource.getContacts()
+
     suspend fun getContactByNumber(phoneNumber: String) = contactsDataSource.getContactByPhoneNumber(phoneNumber)
 
     suspend fun getCallLogs(offset: Int = 0): List<CallLog> = callLogDataSource.getCallLogs(
