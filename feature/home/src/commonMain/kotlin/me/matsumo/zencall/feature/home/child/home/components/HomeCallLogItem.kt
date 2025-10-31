@@ -7,13 +7,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.CallMade
+import androidx.compose.material.icons.automirrored.filled.CallMissed
+import androidx.compose.material.icons.automirrored.filled.CallReceived
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Voicemail
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +35,7 @@ import me.matsumo.zencall.core.model.call.CallLog
 import me.matsumo.zencall.core.model.call.ContactInfo
 import me.matsumo.zencall.core.resource.Res
 import me.matsumo.zencall.core.resource.common_unknown
+import me.matsumo.zencall.core.ui.utils.formatDateTime
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -54,13 +61,63 @@ internal fun HomeCallLogItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
+                modifier = Modifier.fillMaxWidth(),
                 text = contactInfo?.displayName?.takeIf { it.isNotBlank() }
                     ?: callLog.cachedName?.takeIf { it.isNotBlank() }
                     ?: callLog.number?.takeIf { it.isNotBlank() }
                     ?: stringResource(Res.string.common_unknown),
                 style = MaterialTheme.typography.bodyLarge,
             )
+
+            CallType(
+                modifier = Modifier.fillMaxWidth(),
+                callLog = callLog,
+                contactInfo = contactInfo,
+            )
         }
+    }
+}
+
+@Composable
+private fun CallType(
+    callLog: CallLog,
+    contactInfo: ContactInfo?,
+    modifier: Modifier = Modifier,
+) {
+    val color = when (callLog.type) {
+        CallLog.Type.REJECTED,
+        CallLog.Type.MISSED,
+        CallLog.Type.BLOCKED -> MaterialTheme.colorScheme.error
+
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = when (callLog.type) {
+                CallLog.Type.INCOMING -> Icons.AutoMirrored.Filled.CallReceived
+                CallLog.Type.OUTGOING -> Icons.AutoMirrored.Filled.CallMade
+                CallLog.Type.REJECTED -> Icons.AutoMirrored.Filled.CallMissed
+                CallLog.Type.MISSED -> Icons.AutoMirrored.Filled.CallMissed
+                CallLog.Type.BLOCKED -> Icons.Default.Block
+                CallLog.Type.VOICEMAIL -> Icons.Default.Voicemail
+                CallLog.Type.ANSWERED_EXTERNALLY -> Icons.AutoMirrored.Filled.CallReceived
+            },
+            contentDescription = null,
+            tint = color,
+        )
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = callLog.location?.takeIf { it.isNotBlank() }?.let { "$it・" }.orEmpty() + formatDateTime(callLog.dateMillis),
+            style = MaterialTheme.typography.bodyMedium,
+            color = color,
+        )
     }
 }
 

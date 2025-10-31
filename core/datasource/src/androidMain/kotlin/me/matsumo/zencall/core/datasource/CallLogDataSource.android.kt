@@ -1,5 +1,6 @@
 package me.matsumo.zencall.core.datasource
 
+import android.content.ContentResolver
 import android.content.Context
 import android.os.Bundle
 import android.provider.CallLog
@@ -23,19 +24,14 @@ class AndroidCallLogDataSource(
             CallLog.Calls.TYPE,
             CallLog.Calls.DATE,
             CallLog.Calls.DURATION,
+            CallLog.Calls.GEOCODED_LOCATION,
         )
         val appliedOffset = offset.coerceAtLeast(0)
         val queryArgs = Bundle().apply {
-            putStringArray(
-                android.content.ContentResolver.QUERY_ARG_SORT_COLUMNS,
-                arrayOf(CallLog.Calls.DATE),
-            )
-            putInt(
-                android.content.ContentResolver.QUERY_ARG_SORT_DIRECTION,
-                android.content.ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
-            )
-            putInt(android.content.ContentResolver.QUERY_ARG_LIMIT, limit)
-            putInt(android.content.ContentResolver.QUERY_ARG_OFFSET, appliedOffset)
+            putStringArray(ContentResolver.QUERY_ARG_SORT_COLUMNS, arrayOf(CallLog.Calls.DATE),)
+            putInt(ContentResolver.QUERY_ARG_SORT_DIRECTION, ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,)
+            putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
+            putInt(ContentResolver.QUERY_ARG_OFFSET, appliedOffset)
         }
         val cursor = resolver.query(
             CallLog.Calls.CONTENT_URI,
@@ -51,6 +47,7 @@ class AndroidCallLogDataSource(
             val typeIndex = c.getColumnIndexOrThrow(CallLog.Calls.TYPE)
             val dateIndex = c.getColumnIndexOrThrow(CallLog.Calls.DATE)
             val durationIndex = c.getColumnIndexOrThrow(CallLog.Calls.DURATION)
+            val geocodedLocationIndex = c.getColumnIndexOrThrow(CallLog.Calls.GEOCODED_LOCATION)
 
             val entries = buildList {
                 while (c.moveToNext()) {
@@ -60,6 +57,7 @@ class AndroidCallLogDataSource(
                     val typeValue = c.getInt(typeIndex)
                     val dateMillis = c.getLong(dateIndex)
                     val duration = c.getInt(durationIndex)
+                    val geocodedLocation = c.getString(geocodedLocationIndex)
 
                     add(
                         CallLogModel(
@@ -69,6 +67,7 @@ class AndroidCallLogDataSource(
                             type = typeValue.toCallLogType(),
                             dateMillis = dateMillis,
                             durationSec = duration,
+                            location = geocodedLocation,
                         ),
                     )
                     if (size >= limit) {
