@@ -7,10 +7,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.matsumo.zencall.core.model.call.ContactInfo
 
-class AndroidContactDataSource(
+class AndroidContactsDataSource(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
-) : ContactDataSource {
+) : ContactsDataSource {
 
     override suspend fun getContacts(limit: Int, offset: Int): List<ContactInfo> = withContext(ioDispatcher) {
         if (limit <= 0) return@withContext emptyList()
