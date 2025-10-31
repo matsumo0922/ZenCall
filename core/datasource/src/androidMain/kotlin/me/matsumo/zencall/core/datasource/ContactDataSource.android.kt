@@ -1,6 +1,7 @@
 package me.matsumo.zencall.core.datasource
 
 import android.content.Context
+import android.net.Uri
 import android.provider.ContactsContract
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -62,6 +63,46 @@ class AndroidContactDataSource(
                 }
             }
         } ?: emptyList()
+    }
+
+    override suspend fun getContactByPhoneNumber(phoneNumber: String): ContactInfo? = withContext(ioDispatcher) {
+        val normalized = phoneNumber.trim()
+        if (normalized.isEmpty()) return@withContext null
+
+        val resolver = context.contentResolver
+        val projection = arrayOf(
+            ContactsContract.PhoneLookup._ID,
+            ContactsContract.PhoneLookup.DISPLAY_NAME,
+        )
+        val uri: Uri = Uri.withAppendedPath(
+            ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+            Uri.encode(normalized),
+        )
+
+        resolver.query(
+            uri,
+            projection,
+            null,
+            null,
+            null,
+        )?.use { cursor ->
+            val idIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID)
+            val nameIndex = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME)
+
+            if (cursor.moveToFirst()) {
+                val contactId = cursor.getLong(idIndex)
+                val displayName = cursor.getString(nameIndex)?.takeIf { it.isNotBlank() } ?: ""
+                val numbers = loadPhoneNumbers(resolver, contactId)
+
+                return@withContext ContactInfo(
+                    id = contactId,
+                    displayName = displayName,
+                    phoneNumbers = numbers.ifEmpty { listOf(normalized) },
+                )
+            }
+        }
+
+        null
     }
 
     private fun loadPhoneNumbers(resolver: android.content.ContentResolver, contactId: Long): List<String> {
