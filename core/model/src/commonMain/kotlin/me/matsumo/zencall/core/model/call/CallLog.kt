@@ -8,6 +8,7 @@ data class CallLog(
     val dateMillis: Long,
     val durationSec: Int,
     val location: String?,
+    val groupedCount: Int,
 ) {
     enum class Type {
         INCOMING,

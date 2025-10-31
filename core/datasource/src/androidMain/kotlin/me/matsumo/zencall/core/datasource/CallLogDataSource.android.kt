@@ -68,6 +68,7 @@ class AndroidCallLogDataSource(
                             dateMillis = dateMillis,
                             durationSec = duration,
                             location = geocodedLocation,
+                            groupedCount = 1,
                         ),
                     )
                     if (size >= limit) {

@@ -60,19 +60,44 @@ internal fun HomeCallLogItem(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
+            TitleText(
                 modifier = Modifier.fillMaxWidth(),
-                text = contactInfo?.displayName?.takeIf { it.isNotBlank() }
-                    ?: callLog.cachedName?.takeIf { it.isNotBlank() }
-                    ?: callLog.number?.takeIf { it.isNotBlank() }
-                    ?: stringResource(Res.string.common_unknown),
-                style = MaterialTheme.typography.bodyLarge,
+                callLog = callLog,
+                contactInfo = contactInfo,
             )
 
             CallType(
                 modifier = Modifier.fillMaxWidth(),
                 callLog = callLog,
-                contactInfo = contactInfo,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TitleText(
+    callLog: CallLog,
+    contactInfo: ContactInfo?,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = contactInfo?.displayName?.takeIf { it.isNotBlank() }
+                ?: callLog.cachedName?.takeIf { it.isNotBlank() }
+                ?: callLog.number?.takeIf { it.isNotBlank() }
+                ?: stringResource(Res.string.common_unknown),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+
+        if (callLog.groupedCount > 1) {
+            Text(
+                text = "(${callLog.groupedCount})",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -81,7 +106,6 @@ internal fun HomeCallLogItem(
 @Composable
 private fun CallType(
     callLog: CallLog,
-    contactInfo: ContactInfo?,
     modifier: Modifier = Modifier,
 ) {
     val color = when (callLog.type) {

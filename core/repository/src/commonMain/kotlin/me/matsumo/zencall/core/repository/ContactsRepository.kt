@@ -24,8 +24,8 @@ class ContactsRepository(
 
     suspend fun getContactByNumber(phoneNumber: String) = contactsDataSource.getContactByPhoneNumber(phoneNumber)
 
-    suspend fun getCallLogs(offset: Int = 0): List<CallLog> = callLogDataSource.getCallLogs(
-        limit = LIMIT,
+    suspend fun getCallLogs(limit: Int = LIMIT, offset: Int = 0): List<CallLog> = callLogDataSource.getCallLogs(
+        limit = limit,
         offset = offset,
     )
 
