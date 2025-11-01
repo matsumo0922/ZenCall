@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -91,35 +92,51 @@ private fun HomeScreen(
                         previousSection == null || previousSection != sectionLabel
                     }
 
+                    val isSectionStart = shouldShowDateHeader
+                    val isSectionEnd = run {
+                        val nextDateMillis = if (index + 1 < callLogsPagingAdapter.itemCount) {
+                            callLogsPagingAdapter.peek(index + 1)?.dateMillis
+                        } else {
+                            null
+                        }
+                        val nextSection = nextDateMillis?.let { resolveSectionLabel(it) }
+                        nextSection == null || nextSection != sectionLabel
+                    }
+
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        if (shouldShowDateHeader) {
+                        if (isSectionStart) {
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(top = 16.dp, bottom = 6.dp)
-                                    .padding(horizontal = 16.dp),
+                                    .padding(horizontal = 32.dp),
                                 text = sectionLabel,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
 
+                        val shape = if (isSectionStart || isSectionEnd) {
+                            RoundedCornerShape(
+                                topStart = if (isSectionStart) 16.dp else 0.dp,
+                                topEnd = if (isSectionStart) 16.dp else 0.dp,
+                                bottomStart = if (isSectionEnd) 16.dp else 0.dp,
+                                bottomEnd = if (isSectionEnd) 16.dp else 0.dp,
+                            )
+                        } else {
+                            RectangleShape
+                        }
+
                         HomeCallLogItem(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
-                                .then(
-                                    if (shouldShowDateHeader) {
-                                        Modifier.clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                                    } else {
-                                        Modifier
-                                    }
-                                )
+                                .clip(shape)
                                 .fillMaxWidth(),
                             callLog = callLog,
-                            contactInfo = contact
+                            contactInfo = contact,
                         )
                     }
                 }
