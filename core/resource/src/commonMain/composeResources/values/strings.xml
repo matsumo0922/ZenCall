@@ -50,6 +50,12 @@
     <string name="unit_month">月</string>
     <string name="unit_day">日</string>
     <string name="unit_sheet">枚</string>
+    <string name="unit_today">今日</string>
+    <string name="unit_yesterday">昨日</string>
+    <string name="unit_this_week">今週</string>
+    <string name="unit_last_week">先週</string>
+    <string name="unit_this_month">今月</string>
+    <string name="unit_last_month_and_more">先月以前</string>
 
     <!-- Home -->
     <string name="home_title">証明写真</string>

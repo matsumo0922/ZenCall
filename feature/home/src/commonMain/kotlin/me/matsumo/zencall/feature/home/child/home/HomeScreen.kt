@@ -31,9 +31,17 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import me.matsumo.zencall.core.model.call.CallLog
 import me.matsumo.zencall.core.model.call.ContactInfo
+import me.matsumo.zencall.core.resource.Res
+import me.matsumo.zencall.core.resource.unit_last_month_and_more
+import me.matsumo.zencall.core.resource.unit_last_week
+import me.matsumo.zencall.core.resource.unit_this_month
+import me.matsumo.zencall.core.resource.unit_this_week
+import me.matsumo.zencall.core.resource.unit_today
+import me.matsumo.zencall.core.resource.unit_yesterday
 import me.matsumo.zencall.core.ui.screen.AsyncLoadContents
 import me.matsumo.zencall.core.ui.screen.LazyPagingItemsLoadContents
 import me.matsumo.zencall.feature.home.child.home.components.HomeCallLogItem
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -146,6 +154,7 @@ private fun HomeScreen(
 }
 
 @OptIn(ExperimentalTime::class)
+@Composable
 private fun resolveSectionLabel(dateMillis: Long): String {
     val timeZone = TimeZone.currentSystemDefault()
     val todayDate = Clock.System.now().toLocalDateTime(timeZone).date
@@ -157,12 +166,12 @@ private fun resolveSectionLabel(dateMillis: Long): String {
     val startOfThisMonth = LocalDate(todayDate.year, todayDate.monthNumber, 1)
 
     return when {
-        callDate == todayDate -> "今日"
-        callDate == yesterday -> "昨日"
-        callDate >= startOfThisWeek -> "今週"
-        callDate >= startOfLastWeek -> "先週"
-        callDate >= startOfThisMonth -> "今月"
-        else -> "先月以前"
+        callDate == todayDate -> stringResource(Res.string.unit_today)
+        callDate == yesterday -> stringResource(Res.string.unit_yesterday)
+        callDate >= startOfThisWeek -> stringResource(Res.string.unit_this_week)
+        callDate >= startOfLastWeek -> stringResource(Res.string.unit_last_week)
+        callDate >= startOfThisMonth -> stringResource(Res.string.unit_this_month)
+        else -> stringResource(Res.string.unit_last_month_and_more)
     }
 }
 
